@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Simpson Store</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,119 +17,100 @@ box-sizing:border-box;
 }
 
 body{
+font-family:'Fredoka',sans-serif;
 background:#0f0f0f;
-font-family:'Montserrat',sans-serif;
 color:white;
 overflow-x:hidden;
 }
 
-/* HEADER */
-
 header{
+background:linear-gradient(90deg,#ffd90f,#ffb300);
+padding:25px;
+text-align:center;
+color:#111;
+box-shadow:0 4px 20px rgba(0,0,0,.4);
 position:sticky;
 top:0;
 z-index:999;
-background:#121212;
-border-bottom:4px solid #ffd90f;
-padding:18px 5%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:15px;
 }
 
-.logo{
-font-family:'Luckiest Guy',cursive;
-font-size:2rem;
-color:#ffd90f;
-letter-spacing:2px;
+header h1{
+font-size:3rem;
 }
 
-.search-box{
-display:flex;
-align-items:center;
-background:#1d1d1d;
-padding:10px 15px;
-border-radius:14px;
-width:320px;
-max-width:100%;
-border:2px solid #2b2b2b;
+header p{
+font-size:1.1rem;
+margin-top:5px;
 }
-
-.search-box input{
-background:transparent;
-border:none;
-outline:none;
-color:white;
-width:100%;
-font-size:15px;
-}
-
-.search-box input::placeholder{
-color:#999;
-}
-
-/* HERO */
 
 .hero{
-padding:80px 5%;
-text-align:center;
+height:350px;
 background:
-linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
-url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1400&auto=format&fit=crop');
+linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
+url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600');
 background-size:cover;
 background-position:center;
-border-bottom:5px solid #ffd90f;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:20px;
 }
 
-.hero h1{
-font-family:'Luckiest Guy',cursive;
-font-size:4rem;
+.hero-content h2{
+font-size:3rem;
 color:#ffd90f;
-margin-bottom:20px;
-text-shadow:4px 4px 0px #000;
+margin-bottom:15px;
 }
 
-.hero p{
+.hero-content p{
 font-size:1.2rem;
 max-width:700px;
 margin:auto;
-line-height:1.6;
-color:#ddd;
+opacity:.9;
 }
 
-/* FILTERS */
-
-.filters{
-padding:25px 5%;
+.controls{
+padding:25px;
 display:flex;
-gap:12px;
 flex-wrap:wrap;
+gap:15px;
 justify-content:center;
+background:#151515;
+border-bottom:1px solid #222;
 }
 
-.filter-btn{
-background:#1f1f1f;
-border:2px solid #ffd90f;
-color:#ffd90f;
-padding:10px 18px;
-border-radius:12px;
+.search{
+padding:14px;
+width:300px;
+border:none;
+border-radius:14px;
+background:#222;
+color:white;
+font-size:1rem;
+outline:none;
+}
+
+.category-btn{
+padding:12px 20px;
+border:none;
+border-radius:14px;
+background:#222;
+color:white;
 cursor:pointer;
-font-weight:700;
+font-weight:bold;
 transition:.25s;
 }
 
-.filter-btn:hover{
+.category-btn:hover,
+.category-btn.active{
 background:#ffd90f;
-color:#000;
+color:#111;
 transform:translateY(-2px);
 }
 
-/* PRODUCTS */
-
 .products{
-padding:20px 5% 60px;
+padding:40px;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:28px;
@@ -140,152 +120,282 @@ gap:28px;
 background:#181818;
 border-radius:22px;
 overflow:hidden;
-border:3px solid #2a2a2a;
-transition:.3s;
 position:relative;
+transition:.3s;
+border:1px solid #2b2b2b;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.02);
-border-color:#ffd90f;
-box-shadow:0 12px 30px rgba(255,217,15,.18);
+transform:translateY(-8px);
+box-shadow:0 15px 35px rgba(0,0,0,.45);
 }
 
 .card img{
 width:100%;
-height:300px;
+height:270px;
 object-fit:cover;
 background:#111;
 }
 
+.badge{
+position:absolute;
+top:15px;
+left:15px;
+background:#ff4757;
+padding:6px 12px;
+border-radius:50px;
+font-size:.8rem;
+font-weight:bold;
+}
+
+.favorite{
+position:absolute;
+top:15px;
+right:15px;
+background:rgba(0,0,0,.6);
+width:42px;
+height:42px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+cursor:pointer;
+font-size:1.2rem;
+transition:.2s;
+}
+
+.favorite:hover{
+transform:scale(1.1);
+}
+
 .card-content{
-padding:18px;
+padding:20px;
+}
+
+.card h3{
+font-size:1.2rem;
+margin-bottom:10px;
+min-height:60px;
 }
 
 .category{
-display:inline-block;
-background:#ffd90f;
-color:#000;
-font-size:.8rem;
-padding:6px 12px;
-border-radius:999px;
-font-weight:700;
-margin-bottom:12px;
-}
-
-.title{
-font-size:1.1rem;
-font-weight:700;
-margin-bottom:12px;
-line-height:1.4;
-min-height:52px;
+font-size:.9rem;
+opacity:.7;
+margin-bottom:10px;
 }
 
 .price{
 font-size:1.7rem;
-font-weight:800;
+font-weight:bold;
 color:#ffd90f;
-margin-bottom:18px;
+margin-bottom:15px;
 }
 
-.actions{
+.card-buttons{
 display:flex;
 gap:10px;
 }
 
 .btn{
 flex:1;
-text-align:center;
 padding:12px;
+border:none;
 border-radius:12px;
-font-weight:700;
-text-decoration:none;
+font-weight:bold;
+cursor:pointer;
 transition:.25s;
 }
 
-.btn-primary{
+.buy{
 background:#ffd90f;
-color:#000;
+color:#111;
 }
 
-.btn-primary:hover{
-background:white;
+.buy:hover{
+transform:scale(1.03);
 }
 
-.btn-secondary{
-background:#252525;
+.view{
+background:#222;
 color:white;
-border:2px solid #333;
 }
 
-.btn-secondary:hover{
-border-color:#ffd90f;
+.cart-btn{
+position:fixed;
+bottom:25px;
+right:25px;
+background:#ffd90f;
+color:#111;
+width:70px;
+height:70px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2rem;
+cursor:pointer;
+box-shadow:0 10px 30px rgba(0,0,0,.5);
+z-index:999;
+}
+
+.cart-count{
+position:absolute;
+top:-5px;
+right:-5px;
+background:#ff4757;
+color:white;
+width:28px;
+height:28px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:.9rem;
+font-weight:bold;
+}
+
+.cart{
+position:fixed;
+top:0;
+right:-420px;
+width:420px;
+height:100vh;
+background:#121212;
+z-index:1000;
+transition:.35s;
+padding:25px;
+overflow-y:auto;
+border-left:1px solid #333;
+}
+
+.cart.open{
+right:0;
+}
+
+.cart h2{
+margin-bottom:20px;
 color:#ffd90f;
 }
 
-/* FOOTER */
+.cart-item{
+display:flex;
+gap:15px;
+margin-bottom:20px;
+background:#1d1d1d;
+padding:10px;
+border-radius:14px;
+}
+
+.cart-item img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.total{
+font-size:1.6rem;
+margin-top:25px;
+font-weight:bold;
+}
+
+.checkout{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+margin-top:20px;
+background:#25D366;
+color:white;
+font-size:1rem;
+font-weight:bold;
+cursor:pointer;
+}
 
 footer{
-padding:35px;
+padding:40px;
 text-align:center;
-background:#121212;
-border-top:4px solid #ffd90f;
-color:#999;
+opacity:.6;
 }
 
-/* MOBILE */
+@media(max-width:700px){
 
-@media(max-width:768px){
-
-.hero h1{
-font-size:2.5rem;
+header h1{
+font-size:2rem;
 }
 
-.hero p{
-font-size:1rem;
+.hero{
+height:280px;
 }
 
-.logo{
-font-size:1.6rem;
+.hero-content h2{
+font-size:2rem;
+}
+
+.cart{
+width:100%;
+}
+
+.products{
+padding:20px;
 }
 
 }
 
 </style>
 </head>
+
 <body>
 
 <header>
-
-<div class="logo">
-🟡 Simpson Store
-</div>
-
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="Buscar coleccionables...">
-</div>
-
+<h1>🟡 Simpson Store</h1>
+<p>Juguetes, coleccionables, peluches y artículos únicos</p>
 </header>
 
 <section class="hero">
-
-<h1>
-Coleccionables de Springfield
-</h1>
-
+<div class="hero-content">
+<h2>Bienvenido a Springfield</h2>
 <p>
-Figuras, peluches, juguetes, coleccionables y artículos únicos para fans reales de Los Simpsons.
+Encuentra juguetes, figuras, peluches y coleccionables con estilo premium.
 </p>
+</div>
+</section>
+
+<section class="controls">
+
+<input
+type="text"
+class="search"
+placeholder="Buscar producto..."
+id="search"
+/>
+
+<div id="categories"></div>
 
 </section>
 
-<div class="filters" id="filters">
-<button class="filter-btn" onclick="filterProducts('Todos')">
-Todos
-</button>
+<section class="products" id="products"></section>
+
+<div class="cart-btn" onclick="toggleCart()">
+🛒
+<div class="cart-count" id="cartCount">0</div>
 </div>
 
-<section class="products" id="products"></section>
+<div class="cart" id="cart">
+
+<h2>Tu carrito</h2>
+
+<div id="cartItems"></div>
+
+<div class="total" id="total">
+Total: $0
+</div>
+
+<button class="checkout" onclick="checkout()">
+Pedir por WhatsApp
+</button>
+
+</div>
 
 <footer>
 Simpson Store © 2026
@@ -293,199 +403,219 @@ Simpson Store © 2026
 
 <script>
 
-/* =========================
-   PRODUCTOS
-========================= */
-
 const PRODUCTS = [
 
 {
-title:"Figura Bart Simpson",
-price:799,
-category:"Figuras",
-image:"https://picsum.photos/500/500?1",
-link:"#"
-},
-
-{
-title:"Peluche Homero Simpson",
+id:1,
+name:"Figura Bart Simpson",
 price:599,
+category:"Juguetes",
+image:"https://i.imgur.com/2nCt3Sbl.jpg",
+link:"#",
+badge:"HOT"
+},
+
+{
+id:2,
+name:"Peluche Homero",
+price:799,
 category:"Peluches",
-image:"https://picsum.photos/500/500?2",
-link:"#"
+image:"https://i.imgur.com/tGbaZCY.jpg",
+link:"#",
+badge:"NUEVO"
 },
 
 {
-title:"Funko Pop Lisa Simpson",
-price:899,
-category:"Funkos",
-image:"https://picsum.photos/500/500?3",
-link:"#"
-},
-
-{
-title:"Figura Krusty Deluxe",
-price:1299,
+id:3,
+name:"Figura Lisa Simpson",
+price:650,
 category:"Coleccionables",
-image:"https://picsum.photos/500/500?4",
+image:"https://i.imgur.com/WCzJDWpl.jpg",
 link:"#"
-}
+},
+
+{
+id:4,
+name:"Muñeco Krusty",
+price:720,
+category:"Juguetes",
+image:"https://i.imgur.com/1n7fK6M.jpg",
+link:"#"
+},
 
 ];
 
-/* =========================
-   VARIABLES
-========================= */
+let cart = [];
 
-const productsContainer=document.getElementById("products");
-const filtersContainer=document.getElementById("filters");
-const searchInput=document.getElementById("searchInput");
+const productsContainer = document.getElementById("products");
+const searchInput = document.getElementById("search");
+const categoriesContainer = document.getElementById("categories");
 
-/* =========================
-   RENDER
-========================= */
-
-function renderProducts(items){
+function renderProducts(products){
 
 productsContainer.innerHTML="";
 
-if(items.length===0){
+products.forEach(product=>{
 
-productsContainer.innerHTML=`
-<h2>
-No se encontraron productos 😢
-</h2>
-`;
-
-return;
-
-}
-
-items.forEach(product=>{
-
-productsContainer.innerHTML+=`
-
+productsContainer.innerHTML += `
 <div class="card">
 
-<img src="${product.image}" alt="${product.title}">
+${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
+
+<div class="favorite">❤️</div>
+
+<img src="${product.image}">
 
 <div class="card-content">
 
-<div class="category">
-${product.category}
-</div>
+<div class="category">${product.category}</div>
 
-<div class="title">
-${product.title}
-</div>
+<h3>${product.name}</h3>
 
-<div class="price">
-$${product.price}
-</div>
+<div class="price">$${product.price}</div>
 
-<div class="actions">
+<div class="card-buttons">
 
-<a href="${product.link}"
-target="_blank"
-class="btn btn-primary">
+<button class="btn buy" onclick="addToCart(${product.id})">
+Agregar
+</button>
 
-Ver producto
-
-</a>
-
-<a href="https://wa.me/"
-target="_blank"
-class="btn btn-secondary">
-
-WhatsApp
-
+<a href="${product.link}" target="_blank" style="flex:1;">
+<button class="btn view">
+Ver
+</button>
 </a>
 
 </div>
 
 </div>
-
 </div>
-
 `;
 
 });
 
 }
 
-/* =========================
-   CATEGORIAS
-========================= */
+function renderCategories(){
 
-function generateFilters(){
+const categories = [...new Set(PRODUCTS.map(p=>p.category))];
 
-const categories=[
-"Todos",
-...new Set(PRODUCTS.map(p=>p.category))
-];
-
-filtersContainer.innerHTML="";
+categoriesContainer.innerHTML = `
+<button class="category-btn active" onclick="filterCategory('Todos', this)">
+Todos
+</button>
+`;
 
 categories.forEach(cat=>{
 
-filtersContainer.innerHTML+=`
-
-<button class="filter-btn"
-onclick="filterProducts('${cat}')">
-
+categoriesContainer.innerHTML += `
+<button class="category-btn" onclick="filterCategory('${cat}', this)">
 ${cat}
-
 </button>
-
 `;
 
 });
 
 }
 
-function filterProducts(category){
+function filterCategory(category,btn){
+
+document.querySelectorAll(".category-btn")
+.forEach(b=>b.classList.remove("active"));
+
+btn.classList.add("active");
 
 if(category==="Todos"){
-
 renderProducts(PRODUCTS);
-
 return;
-
 }
 
-const filtered=PRODUCTS.filter(
-p=>p.category===category
+renderProducts(
+PRODUCTS.filter(p=>p.category===category)
 );
 
-renderProducts(filtered);
-
 }
-
-/* =========================
-   SEARCH
-========================= */
 
 searchInput.addEventListener("input",e=>{
 
-const value=e.target.value.toLowerCase();
+const term = e.target.value.toLowerCase();
 
-const filtered=PRODUCTS.filter(product=>
-
-product.title.toLowerCase().includes(value) ||
-product.category.toLowerCase().includes(value)
-
+renderProducts(
+PRODUCTS.filter(p=>
+p.name.toLowerCase().includes(term)
+)
 );
-
-renderProducts(filtered);
 
 });
 
-/* =========================
-   INIT
-========================= */
+function addToCart(id){
 
-generateFilters();
+const product = PRODUCTS.find(p=>p.id===id);
+
+cart.push(product);
+
+updateCart();
+
+}
+
+function updateCart(){
+
+document.getElementById("cartCount").innerText = cart.length;
+
+const cartItems = document.getElementById("cartItems");
+
+cartItems.innerHTML="";
+
+let total = 0;
+
+cart.forEach(item=>{
+
+total += item.price;
+
+cartItems.innerHTML += `
+<div class="cart-item">
+<img src="${item.image}">
+<div>
+<h4>${item.name}</h4>
+<p>$${item.price}</p>
+</div>
+</div>
+`;
+
+});
+
+document.getElementById("total").innerText =
+"Total: $" + total;
+
+}
+
+function toggleCart(){
+document.getElementById("cart")
+.classList.toggle("open");
+}
+
+function checkout(){
+
+if(cart.length===0){
+alert("Tu carrito está vacío");
+return;
+}
+
+let message = "Hola, quiero pedir:%0A%0A";
+
+cart.forEach(item=>{
+message += `• ${item.name} - $${item.price}%0A`;
+});
+
+window.open(
+`https://wa.me/5210000000000?text=${message}`,
+"_blank"
+);
+
+}
+
 renderProducts(PRODUCTS);
+renderCategories();
 
 </script>
 
