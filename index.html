@@ -3,23 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Simpson Store</title>
 
 <style>
+
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
+  font-family:Arial, sans-serif;
   background:#111;
   color:white;
-  font-family:Arial;
 }
 
 header{
   background:#FFD90F;
   color:#111;
-  padding:20px;
   text-align:center;
-  font-size:32px;
+  padding:25px;
+  font-size:34px;
   font-weight:bold;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 10px rgba(0,0,0,.4);
+}
+
+.sub{
+  text-align:center;
+  padding:15px;
+  color:#bbb;
+  font-size:18px;
 }
 
 #products{
@@ -31,9 +48,10 @@ header{
 
 .card{
   background:#1c1c1c;
-  border-radius:14px;
+  border-radius:16px;
   overflow:hidden;
   transition:.2s;
+  border:1px solid #2a2a2a;
 }
 
 .card:hover{
@@ -53,13 +71,14 @@ header{
 
 .title{
   font-size:15px;
-  min-height:50px;
+  line-height:1.4;
+  min-height:60px;
 }
 
 .price{
-  font-size:24px;
+  font-size:26px;
   font-weight:bold;
-  margin:10px 0;
+  margin:14px 0;
   color:#00e676;
 }
 
@@ -68,11 +87,36 @@ header{
   background:#FFD90F;
   color:#111;
   text-align:center;
-  padding:12px;
-  border-radius:10px;
+  padding:13px;
+  border-radius:12px;
   text-decoration:none;
   font-weight:bold;
+  transition:.2s;
 }
+
+.btn:hover{
+  opacity:.9;
+}
+
+.loading{
+  text-align:center;
+  font-size:24px;
+  padding:60px;
+}
+
+.error{
+  text-align:center;
+  color:#ff5252;
+  font-size:22px;
+  padding:60px;
+}
+
+footer{
+  text-align:center;
+  padding:40px;
+  color:#777;
+}
+
 </style>
 </head>
 
@@ -82,41 +126,67 @@ header{
 🟡 Simpson Store
 </header>
 
-<div id="products"></div>
+<div class="sub">
+Juguetes y coleccionables de Los Simpsons
+</div>
+
+<div id="products">
+  <div class="loading">
+    Cargando juguetes...
+  </div>
+</div>
+
+<footer>
+Simpson Store © 2026
+</footer>
 
 <script>
 
 const sellerId = "343604045";
+const categoryId = "MLM438172";
 
 async function loadProducts(){
 
   const container = document.getElementById("products");
 
-  container.innerHTML = "<h2>Cargando juguetes...</h2>";
-
   try{
 
-    const res = await fetch(
-      `https://api.allorigins.win/raw?url=${
-        encodeURIComponent(
-          `https://api.mercadolibre.com/sites/MLM/search?seller_id=${sellerId}&category=MLM438172`
-        )
-      }`
-    );
+    const apiUrl =
+      `https://api.mercadolibre.com/sites/MLM/search?seller_id=${sellerId}&category=${categoryId}`;
 
-    const data = await res.json();
+    const proxy =
+      `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+
+    const res = await fetch(proxy);
+
+    const proxyData = await res.json();
+
+    const data = JSON.parse(proxyData.contents);
 
     container.innerHTML = "";
 
+    if(!data.results || data.results.length === 0){
+
+      container.innerHTML = `
+        <div class="error">
+          No se encontraron productos
+        </div>
+      `;
+
+      return;
+    }
+
     data.results.forEach(product => {
 
-      const img =
-        product.thumbnail.replace("-I.jpg","-O.jpg");
+      const image =
+        product.thumbnail
+          .replace("-I.jpg","-O.jpg");
 
       container.innerHTML += `
+
         <div class="card">
 
-          <img src="${img}">
+          <img src="${image}" alt="${product.title}">
 
           <div class="info">
 
@@ -125,29 +195,33 @@ async function loadProducts(){
             </div>
 
             <div class="price">
-              $${product.price}
+              $${product.price.toLocaleString()}
             </div>
 
             <a
               class="btn"
-              target="_blank"
               href="${product.permalink}"
+              target="_blank"
             >
-              Ver en Mercado Libre
+              Ver producto
             </a>
 
           </div>
 
         </div>
+
       `;
     });
 
   }catch(err){
 
-    container.innerHTML =
-      "<h2>Error cargando productos</h2>";
-
     console.error(err);
+
+    container.innerHTML = `
+      <div class="error">
+        Error cargando productos 😢
+      </div>
+    `;
   }
 }
 
