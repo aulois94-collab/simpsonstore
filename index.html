@@ -1,45 +1,53 @@
 <script>
 
-const sellerId = "343604045";
-const categoryId = "MLM438172";
-
 const proxy =
   "https://ml-proxy.aulois94.workers.dev";
+
+const items = [
+
+"MLM2955099509",
+"MLM2398082435",
+"MLM3538153900",
+"MLM3538103502",
+"MLM3696902030",
+"MLM2461878155"
+
+];
 
 async function loadProducts(){
 
   const container =
     document.getElementById("products");
 
+  container.innerHTML = `
+    <div class="loading">
+      Cargando juguetes...
+    </div>
+  `;
+
   try{
 
-    const url =
-      `${proxy}/sites/MLM/search?seller_id=${sellerId}&category=${categoryId}`;
+    const products = await Promise.all(
 
-    const res = await fetch(url);
+      items.map(async id => {
 
-    const data = await res.json();
+        const res = await fetch(
+          `${proxy}/items/${id}`
+        );
 
-    console.log(data);
+        return await res.json();
+
+      })
+
+    );
 
     container.innerHTML = "";
 
-    if(!data.results){
-
-      container.innerHTML = `
-        <div class="error">
-          No se encontraron productos
-        </div>
-      `;
-
-      return;
-    }
-
-    data.results.forEach(product => {
+    products.forEach(product => {
 
       const image =
-        product.thumbnail
-          .replace("-I.jpg","-O.jpg");
+        product.pictures?.[0]?.secure_url
+        || product.thumbnail;
 
       container.innerHTML += `
 
