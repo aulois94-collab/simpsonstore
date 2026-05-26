@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Conectando con Mercado Libre...</title>
+<style>
+  body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #FED90F; }
+  .box { background: white; border: 4px solid #1a1a1a; border-radius: 16px; padding: 2.5rem; text-align: center; max-width: 480px; box-shadow: 6px 6px 0 #1a1a1a; }
+  h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+  .token-box { background: #f0f0f0; border: 2px solid #ccc; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: .78rem; word-break: break-all; text-align: left; margin: 1rem 0; max-height: 120px; overflow-y: auto; }
+  .btn { background: #1A6FB5; color: white; border: 3px solid #1a1a1a; border-radius: 30px; padding: .75rem 2rem; font-size: 1rem; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 #1a1a1a; }
+  .btn:hover { background: #2589D4; }
+  .status { font-size: .9rem; color: #555; margin-top: .5rem; }
+  .ok { color: #27A05A; font-weight: 800; }
+  .err { color: #E32B2B; font-weight: 800; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>🔑 Obteniendo Token de ML...</h2>
+  <div class="status" id="status">Procesando código de autorización...</div>
+  <div class="token-box" id="tokenBox" style="display:none"></div>
+  <button class="btn" id="copyBtn" style="display:none" onclick="copyToken()">📋 Copiar Token</button>
+  <div class="status" id="msg"></div>
+</div>
+
+<script>
+const PROXY = 'https://ml-proxy.aulois94.workers.dev';
+const CLIENT_ID = '2985587398780518';
+const CLIENT_SECRET = 'bKtCCI8gsQGq56Ea2j6Dctph3wCbGvcQ';
+const REDIRECT_URI = 'https://simpsonstore.com/callback.html';
+
+async function run() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
+  if (!code) {
+    document.getElementById('status').innerHTML = '<span class="err">No se encontró código. Vuelve a autorizar.</span>';
+    return;
+  }
+
+  document.getElementById('status').textContent = '✅ Código capturado! Obteniendo token...';
+
+  try {
+    const res = await fetch(`${PROXY}/oauth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `grant_type=authorization_code&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${code}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`
+    });
+    const data = await res.json();
+
+    if (data.access_token) {
+      document.getElementById('status').innerHTML = '<span class="ok">✅ ¡Token obtenido exitosamente!</span>';
+      document.getElementById('tokenBox').style.display = 'block';
+      document.getElementById('tokenBox').textContent = JSON.stringify(data, null, 2);
+      document.getElementById('copyBtn').style.display = 'inline-block';
+      document.getElementById('msg').textContent = 'Copia este token y mándalo al chat.';
+      localStorage.setItem('ml_token', data.access_token);
+      localStorage.setItem('ml_refresh', data.refresh_token);
+    } else {
+      document.getElementById('status').innerHTML = `<span class="err">Error: ${JSON.stringify(data)}</span>`;
+    }
+  } catch(e) {
+    document.getElementById('status').innerHTML = `<span class="err">Error de red: ${e.message}</span>`;
+  }
+}
+
+function copyToken() {
+  const text = document.getElementById('tokenBox').textContent;
+  navigator.clipboard.writeText(text);
+  document.getElementById('msg').textContent = '✅ ¡Copiado! Pégalo en el chat.';
+}
+
+run();
+</script>
+</body>
+</html>
