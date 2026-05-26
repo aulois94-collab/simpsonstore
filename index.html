@@ -280,8 +280,9 @@ const CONFIG = {
   CLIENT_ID:     "2985587398780518",
   CLIENT_SECRET: "bKtCCI8gsQGq56Ea2j6Dctph3wCbGvcQ",
   SELLER_ID:     "343604045",          // tu ID de vendedor en ML
-  WA_NUMBER:     "5217204748891",      // tu WhatsApp: 521 + 10 dígitos
+  WA_NUMBER:     "521XXXXXXXXXX",      // tu WhatsApp: 521 + 10 dígitos
   ML_SITE:       "MLM",
+  PROXY:         "https://ml-proxy.aulois94.workers.dev",
 };
 
 /* ═══════════════════════════════════════════════════
@@ -300,7 +301,7 @@ let tokenExpiry = 0;
 async function getToken() {
   if (accessToken && Date.now() < tokenExpiry) return accessToken;
   try {
-    const res = await fetch('https://api.mercadolibre.com/oauth/token', {
+    const res = await fetch(`${CONFIG.PROXY}/oauth/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -326,7 +327,7 @@ async function fetchProducts() {
   try {
     // Trae hasta 200 productos del vendedor
     const searchRes = await fetch(
-      `https://api.mercadolibre.com/sites/${CONFIG.ML_SITE}/search?seller_id=${CONFIG.SELLER_ID}&limit=200`,
+      `${CONFIG.PROXY}/sites/${CONFIG.ML_SITE}/search?seller_id=${CONFIG.SELLER_ID}&limit=200`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const searchData = await searchRes.json();
@@ -341,7 +342,7 @@ async function fetchProducts() {
       const chunk = items.slice(i, i + CHUNK);
       const ids = chunk.map(p => p.id).join(',');
       const detRes = await fetch(
-        `https://api.mercadolibre.com/items?ids=${ids}&attributes=id,title,price,thumbnail,pictures,permalink,category_id,condition,available_quantity`,
+        `${CONFIG.PROXY}/items?ids=${ids}&attributes=id,title,price,thumbnail,pictures,permalink,category_id,condition,available_quantity`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const detData = await detRes.json();
