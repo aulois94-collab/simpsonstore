@@ -460,10 +460,27 @@ async function fetchProducts(offset = 0, sort = '') {
     ? `&sort=${sort}` : '';
   const condParam = sort === 'new' ? '&condition=new' : '';
   const shipParam = sort === 'free_shipping' ? '&shipping_cost=free' : '';
-  const url = `https://api.mercadolibre.com/sites/MLM/search?seller_id=${SELLER_ID}&limit=${PAGE_SIZE}&offset=${offset}${sortParam}${condParam}${shipParam}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('API error ' + res.status);
-  return res.json();
+  const mlUrl = `https://api.mercadolibre.com/sites/MLM/search?seller_id=${SELLER_ID}&limit=${PAGE_SIZE}&offset=${offset}${sortParam}${condParam}${shipParam}`;
+
+  // Intenta directo primero (funciona si el sitio ya está en HTTPS)
+  // Si falla por CORS, usa proxies de fallback
+  const proxies = [
+    mlUrl,
+    `https://corsproxy.io/?${encodeURIComponent(mlUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(mlUrl)}`
+  ];
+
+  for (const url of proxies) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.results) return data;
+    } catch(e) {
+      continue;
+    }
+  }
+  throw new Error('No se pudo conectar con ningún proxy');
 }
 
 function formatPrice(price) {
